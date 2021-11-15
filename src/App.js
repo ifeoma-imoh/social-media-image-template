@@ -1,12 +1,13 @@
+import "./App.css";
 import React, { useState } from "react";
 import { Image, Transformation } from "cloudinary-react";
 
-function BlogTitle({ blogInput, onTitleChange }) {
+function PostTitle({ title, onTitleChange }) {
   return (
-    <div>
+    <div className="form-control">
       <label htmlFor="blog title">Blog Title:</label>
       <input
-        value={blogInput}
+        value={title}
         onChange={onTitleChange}
         type="text"
         placeholder="Enter a post title"
@@ -17,7 +18,7 @@ function BlogTitle({ blogInput, onTitleChange }) {
 
 function Author({ authorName, onNameChange }) {
   return (
-    <div>
+    <div className="form-control">
       <label>Author:</label>
       <input
         value={authorName}
@@ -31,31 +32,31 @@ function Author({ authorName, onNameChange }) {
 
 const App = () => {
   const [blogInput, setBlogInput] = useState("");
+  const [authorName, setAuthorName] = useState("");
   const [showBanner, setShowBanner] = useState(false);
 
-  const [authorName, setAuthorName] = useState("");
-
-  const renderOutput = (e) => {
+  const displayImage = (e) => {
     e.preventDefault();
     if (blogInput && authorName) {
       setShowBanner(true);
     }
   };
-
   return (
     <div className="wrapper">
-      <div className="entire-form">
-        <div className="form-only">
-          <form onSubmit={renderOutput}>
-            <BlogTitle
-              blogInput={blogInput}
+      <div className="container">
+        <div className="form">
+          <form onSubmit={displayImage}>
+            <PostTitle
+              title={blogInput}
               onTitleChange={(e) => setBlogInput(e.target.value)}
             />
             <Author
               authorName={authorName}
               onNameChange={(e) => setAuthorName(e.target.value)}
             />
-            <button>Generate Social Image</button>
+            <div className="button-wrapper">
+              <button>Generate Social Image</button>
+            </div>
           </form>
         </div>
         {showBanner && (
@@ -65,23 +66,35 @@ const App = () => {
               <Transformation
                 overlay={{
                   fontFamily: "Arial",
-                  fontSize: 27,
-                  text: blogInput,
+                  fontSize: 40,
+                  fontWeight: "bold",
+                  letter_spacing: 1,
+                  text: `${blogInput}`,
                 }}
                 color="#FFFFFF"
                 width="500"
+                height="200"
                 crop="fit"
               />
               <Transformation flags="layer_apply" gravity="west" x="40" />
               <Transformation
                 overlay={{
                   fontFamily: "Arial",
-                  fontSize: 27,
-                  text: authorName,
+                  fontSize: 25,
+                  text: `Author: ${authorName}`,
+                  textAlign: "",
+                  fontWeight: "bold",
                 }}
                 color="#FFFFFF"
                 width="500"
+                height="100"
                 crop="fit"
+              />
+              <Transformation
+                flags="layer_apply"
+                gravity="south_west"
+                x="40"
+                y="50"
               />
             </Image>
           </div>
